@@ -14,14 +14,16 @@ void Board::Init()
 bool Board::MoveDisk(int x, int y, int disk)
 {
     if(x > WIDTH || y > HEIGHT){
-        // Error: The square doesn't exist.
+        return false;
     }
     
     if(BoardState[x][y] != 0){
-        // Error: The square is already occupied.
+        return false;
     }
 
     BoardState[x][y] = disk;
+
+    return true;
 }
 
 int Board::Judge()

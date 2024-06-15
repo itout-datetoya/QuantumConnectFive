@@ -27,11 +27,11 @@ class Board
         // Judge the board state
         int Judge();
 
+    public:
+        std::array<std::array<int, WIDTH>, HEIGHT> BoardState;
+
     private:
         // Measure all disks and return a result
         std::array<std::array<int, WIDTH>, HEIGHT> Measure();
-
-    private:
-        std::array<std::array<int, WIDTH>, HEIGHT> BoardState;
 
 };
