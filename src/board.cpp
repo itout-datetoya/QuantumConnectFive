@@ -1,33 +1,19 @@
-#include <stdlib.h> 
 #include "board.h"
-
-#define NO_DISK 0
-#define BLACK10_WHITE90 1
-#define BLACK30_WHITE70 2
-#define BLACK70_WHITE30 3
-#define BLACK90_WHITE10 4
-
-#define NONE 0
-#define BLACK 1
-#define WHITE 2
-
-#define CONTINUE 0
-#define WIN_BLACK 1
-#define WIN_WHITE 2
+#include "count.cpp"
 
 
 void Board::Init()
 {
-    for(int i=0;i<WIDTH+1;i++){
-        for(int j=0;j<HEIGHT+1;j++){
+    for(int i=0;i<WIDTH;i++){
+        for(int j=0;j<HEIGHT;j++){
             BoardState[i][j] = NO_DISK;
         }
     }
 }
 
-bool Board::MoveDisk(int x, int y, int rate)
+bool Board::MoveDisk(int x, int y, int disk)
 {
-    if(x >= WIDTH || y >= HEIGHT){
+    if(x > WIDTH || y > HEIGHT){
         // Error: The square doesn't exist.
     }
     
@@ -35,30 +21,52 @@ bool Board::MoveDisk(int x, int y, int rate)
         // Error: The square is already occupied.
     }
 
-    BoardState[x][y] = rate;
+    BoardState[x][y] = disk;
 }
 
 int Board::Judge()
 {
-    std::array<std::array<int, WIDTH+1>, HEIGHT+1> result = Measure();
-    // ToDo: Judgement Logic
-}
+    std::array<std::array<int, WIDTH>, HEIGHT> measuredBoard = Measure();
+    std::vector<Sequence> sequenceList = countSequence(measuredBoard);
 
-std::array<std::array<int, WIDTH+1>, HEIGHT+1> Board::Measure()
-{
-    std::array<std::array<int, WIDTH+1>, HEIGHT+1> result;
-    for(int i=0;i<WIDTH+1;i++){
-        for(int j=0;j<HEIGHT+1;j++){
-            result[i][j] = MeasureDisk(BoardState[i][j]);
+    int blackSequence;
+    int whiteSequence;
+
+    for(int i=0;i<sequenceList.size();i++){
+        if(sequenceList[i].color == BLACK){
+            blackSequence++;
+        }
+        else{
+            whiteSequence++;
         }
     }
 
-    return result;
+    if(blackSequence > whiteSequence){
+        return WIN_BLACK;
+    }
+    else if(blackSequence < whiteSequence){
+        return WIN_WHITE;
+    }
+    else{
+        return CONTINUE;
+    }
 }
 
-int MeasureDisk(int rate)
+std::array<std::array<int, WIDTH>, HEIGHT> Board::Measure()
 {
-    switch(rate){
+    std::array<std::array<int, WIDTH>, HEIGHT> measuredBoard;
+    for(int i=0;i<WIDTH;i++){
+        for(int j=0;j<HEIGHT;j++){
+            measuredBoard[i][j] = MeasureDisk(BoardState[i][j]);
+        }
+    }
+
+    return measuredBoard;
+}
+
+int MeasureDisk(int disk)
+{
+    switch(disk){
         case NO_DISK:
             return NONE;
 
