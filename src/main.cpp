@@ -75,7 +75,20 @@ int main(void)
             while(isMoved == false){
                 int row, col;
                 std::cout << "Player " << currentPlayer << " (" << players[currentPlayer] << "), enter row and column: ";
-                std::cin >> row >> col;
+                
+                while(true){
+                    try{
+                        std::cin >> row >> col;
+                    }
+                    catch(...){
+                        std::cout << "Invalid Input. Try again." << std::endl;
+                        std::cin.clear();
+                        std::cin.ignore();
+                        continue;
+                    }
+
+                    break;
+                }
 
                 // 石を置く
                 if (board.MoveDisk(row, col, currentStone[currentPlayer])) {
@@ -107,7 +120,7 @@ int main(void)
         }
         else if(Cmd == "Judge"){
             currentState = board.Judge();
-            
+
             if(currentPlayer == BLACK){
                 currentPlayer = WHITE;
             }
