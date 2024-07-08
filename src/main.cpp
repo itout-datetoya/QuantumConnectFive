@@ -1,8 +1,7 @@
 #include <iostream>
 #include <vector>
 #include <array>
-#include "board.h"
-#include "count.cpp"
+#include "board.cpp"
 
 // ANSIエスケープシーケンスの定義
 const std::string ANSI_RESET = "\033[0m";
@@ -20,7 +19,7 @@ void displayBoard(std::array<std::array<int, WIDTH>, HEIGHT> board)
     // 列番号の表示
     std::cout << "  ";
     for (int i = 0; i < WIDTH; i++) {
-        std::cout << i << " ";
+        std::cout << i << "  ";
     }
     std::cout << std::endl;
 
@@ -28,25 +27,29 @@ void displayBoard(std::array<std::array<int, WIDTH>, HEIGHT> board)
     for (int i = 0; i < WIDTH; i++) {
         std::cout << i << " ";
         for (int j = 0; j < HEIGHT; j++) {
-            std::cout << ANSI_GREEN_BG;
+            //std::cout << ANSI_GREEN_BG;
             if (board[i][j] == BLACK10_WHITE90) {
-                std::cout << ANSI_WHITE << "10" << ANSI_RESET << ANSI_GREEN_BG << " ";
+                //std::cout << ANSI_WHITE << "10" << ANSI_RESET << ANSI_GREEN_BG << " ";
+                std::cout << "10 ";
             } else if (board[i][j] == BLACK30_WHITE70) {
-                std::cout << ANSI_LIGHT_GRAY << "30" << ANSI_RESET << ANSI_GREEN_BG << " ";
+                //std::cout << ANSI_LIGHT_GRAY << "30" << ANSI_RESET << ANSI_GREEN_BG << " ";
+                std::cout << "30 ";
             } else if (board[i][j] == BLACK70_WHITE30) {
-                std::cout << ANSI_DARK_GRAY << "70" << ANSI_RESET << ANSI_GREEN_BG << " ";
+                //std::cout << ANSI_DARK_GRAY << "70" << ANSI_RESET << ANSI_GREEN_BG << " ";
+                std::cout << "70 ";
             } else if (board[i][j] == BLACK90_WHITE10) {
-                std::cout << ANSI_BLACK << "90" << ANSI_RESET << ANSI_GREEN_BG << " ";
+                //std::cout << ANSI_BLACK << "90" << ANSI_RESET << ANSI_GREEN_BG << " ";
+                std::cout << "90 ";
             } else {
-                std::cout << "  ";
+                std::cout << "○  ";
             }
-            std::cout << ANSI_RESET;
+            //std::cout << ANSI_RESET;
         }
         std::cout << std::endl;
     }
 }
 
-int main()
+int main(void)
 {
     Board board;
     board.Init();
@@ -104,6 +107,7 @@ int main()
         }
         else if(Cmd == "Judge"){
             currentState = board.Judge();
+            
             if(currentPlayer == BLACK){
                 currentPlayer = WHITE;
             }

@@ -1,6 +1,12 @@
 #include <vector>
 #include <array>
-#include "board.h"
+
+#define WIDTH 10
+#define HEIGHT 10
+
+#define NONE 0
+#define BLACK 1
+#define WHITE 2
 
 #define EAST 0
 #define SOUTH_EAST 1

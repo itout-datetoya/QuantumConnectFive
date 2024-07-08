@@ -1,6 +1,44 @@
+#include <cstdlib>
+#include <iostream>
 #include "board.h"
 #include "count.cpp"
 
+
+int getColorByRate(int blackRate, int whiteRate)
+{
+    int randomNumber = rand() % (blackRate + whiteRate);
+
+    if(randomNumber < blackRate){
+        return BLACK;
+    }
+    else{
+        return WHITE;
+    }
+}
+
+int MeasureDisk(int disk)
+{
+    switch(disk){
+        case NO_DISK:
+            return NONE;
+
+        case BLACK10_WHITE90:
+            return getColorByRate(10, 90);
+
+        case BLACK30_WHITE70:
+            return getColorByRate(30, 70); 
+
+        case BLACK70_WHITE30:
+            return getColorByRate(70, 30); 
+
+        case BLACK90_WHITE10:
+            return getColorByRate(90, 10); 
+
+        default:
+            // Error: Undefined Rate
+            return -1;
+    }
+}
 
 void Board::Init()
 {
@@ -31,8 +69,8 @@ int Board::Judge()
     std::array<std::array<int, WIDTH>, HEIGHT> measuredBoard = Measure();
     std::vector<Sequence> sequenceList = countSequence(measuredBoard);
 
-    int blackSequence;
-    int whiteSequence;
+    int blackSequence = 0;
+    int whiteSequence = 0;
 
     for(int i=0;i<sequenceList.size();i++){
         if(sequenceList[i].color == BLACK){
@@ -42,7 +80,7 @@ int Board::Judge()
             whiteSequence++;
         }
     }
-
+    
     if(blackSequence > whiteSequence){
         return WIN_BLACK;
     }
@@ -64,39 +102,4 @@ std::array<std::array<int, WIDTH>, HEIGHT> Board::Measure()
     }
 
     return measuredBoard;
-}
-
-int MeasureDisk(int disk)
-{
-    switch(disk){
-        case NO_DISK:
-            return NONE;
-
-        case BLACK10_WHITE90:
-            return getColorByRate(10, 90);
-
-        case BLACK30_WHITE70:
-            return getColorByRate(30, 70); 
-
-        case BLACK70_WHITE30:
-            return getColorByRate(70, 30); 
-
-        case BLACK90_WHITE10:
-            return getColorByRate(90, 10); 
-
-        default:
-            // Error: Undefined Rate
-    }
-}
-
-int getColorByRate(int blackRate, int whiteRate)
-{
-    int randomNumber = rand() % (blackRate + whiteRate);
-
-    if(randomNumber < blackRate){
-        return BLACK;
-    }
-    else{
-        return WHITE;
-    }
 }
