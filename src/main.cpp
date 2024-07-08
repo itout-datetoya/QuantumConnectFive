@@ -53,9 +53,10 @@ int main()
 
 
     // プレイヤーの設定
-    std::string players[2] = {"BLACK", "WHITE"};
-    int currentPlayer = 0;
-    int currentStone = 0;
+    std::string players[3] = {"NONE", "BLACK", "WHITE"};
+    std::string stones[5] = {"NO_DISK", "BLACK10_WHITE90", "BLACK30_WHITE70", "BLACK70_WHITE30", "BLACK90_WHITE10"};
+    int currentPlayer = BLACK;
+    int currentStone[3] = {NONE, BLACK90_WHITE10, BLACK10_WHITE90};
     int currentState = CONTINUE;
 
     while (currentState == CONTINUE) {
@@ -64,34 +65,56 @@ int main()
 
         // プレイヤーの入力
         std::string Cmd;
-        std::cout << "Player " << (currentPlayer + 1) << " (" << players[currentPlayer] << "), enter command Move or Judge: ";
+        std::cout << "Player " << currentPlayer << " (" << players[currentPlayer] << "), enter command Move " << stones[currentStone[currentPlayer]] << " or Judge: ";
         std::cin >> Cmd;
         if(Cmd == "Move"){
             bool isMoved = false;
             while(isMoved == false){
                 int row, col;
-                std::cout << "Player " << (currentPlayer + 1) << " (" << players[currentPlayer] << "), enter row and column: ";
+                std::cout << "Player " << currentPlayer << " (" << players[currentPlayer] << "), enter row and column: ";
                 std::cin >> row >> col;
 
                 // 石を置く
-                if (board.MoveDisk(row, col, currentStone)) {
+                if (board.MoveDisk(row, col, currentStone[currentPlayer])) {
                     // 次のプレイヤーに交代
-                    currentPlayer = 1 - currentPlayer;
+                    if(currentPlayer == BLACK){
+                        if(currentStone[currentPlayer] == BLACK90_WHITE10){
+                            currentStone[currentPlayer] = BLACK70_WHITE30;
+                        }
+                        else{
+                            currentStone[currentPlayer] = BLACK90_WHITE10;
+                        }
+                        currentPlayer = WHITE;
+                    }
+                    else{
+                        if(currentStone[currentPlayer] == BLACK10_WHITE90){
+                            currentStone[currentPlayer] = BLACK30_WHITE70;
+                        }
+                        else{
+                            currentStone[currentPlayer] = BLACK10_WHITE90;
+                        }
+                        currentPlayer = BLACK;
+                    }
                     isMoved = true;
                 } else {
                     std::cout << "Invalid move. Try again." << std::endl;
                 }
             }
+
         }
         else if(Cmd == "Judge"){
             currentState = board.Judge();
-            
-            currentPlayer = 1 - currentPlayer;
+            if(currentPlayer == BLACK){
+                currentPlayer = WHITE;
+            }
+            else{
+                currentPlayer = BLACK;
+            }
         }
         else{
             std::cout << "Invalid command. Try again." << std::endl;
         }
     }
-
+    std::cout << "Player " << currentState << " (" << players[currentState] << ") WIN" << std::endl;
     return 0;
 }
